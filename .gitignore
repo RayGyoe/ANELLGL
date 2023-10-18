@@ -1,0 +1,15 @@
+.DS_Store
+temp
+.db
+example/bin-release
+native/ANELLGL/.vs
+native/ANELLGL/ANEGLFW.sdf
+native/ANELLGL/Release
+native/ANELLGL/Debug
+native/ANELLGL/x64
+native/ANELLGL/ANELLGL/Release
+native/ANELLGL/ANELLGL/x64
+*.txt
+.docx
+apm
+native/.vs
