@@ -8,7 +8,7 @@ package llgl
 	{
 		
 		public function GetSize():int{
-			return int(ANELLGL.getInstance().isSupported?ANELLGL.getInstance().context.call("Auxiliary_Function", format):0);
+			return int(ANELLGL.getInstance().isSupported?ANELLGL.getInstance().context.call("Auxiliary_Function","GetFormatAttribs", format):0);
 		}
 		
 		//! Vertex attribute name (for GLSL) or semantic name (for HLSL).

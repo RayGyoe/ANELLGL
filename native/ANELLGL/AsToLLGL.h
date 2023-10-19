@@ -5,6 +5,34 @@
 
 static ANEUtils* ANEutils = new ANEUtils();
 
+
+struct AIRVector {
+    float vector2[];
+};
+
+static std::vector<AIRVector> ConvertArray(FREObject src)
+{
+    uint32_t length;
+    FREGetArrayLength(src, &length);
+
+    std::vector<AIRVector> cVector(length);
+
+
+    for (int i = 0; i < length; ++i) {
+        FREObject item = ANEutils->getArrayIndex(src, i);
+        FREObjectType type;
+        FREGetObjectType(item, &type);
+
+        std::cout << "\nobjectType=" << type  << "      index="<<i << std::endl;
+    }
+
+
+    std::cout << "\n cVector.size=" << cVector.size() << "   sizeof(cVector)=" << sizeof(cVector) << std::endl;
+
+    return cVector;
+}
+
+
 static void Convert(LLGL::VertexAttribute& dst, FREObject src)
 {
     dst.name = ANEutils->getString(src,"name");
@@ -17,17 +45,20 @@ static void Convert(LLGL::VertexAttribute& dst, FREObject src)
     dst.instanceDivisor = ANEutils->getInt32(src, "instanceDivisor");
 }
 
-static void Convert(LLGL::BufferDescriptor& dst, FREObject src, std::vector<LLGL::VertexAttribute>& nativeVertexAttribs)
+static void Convert(LLGL::BufferDescriptor& dst, FREObject src)
 {
     FREObject VertexAttribs = ANEutils->getObject(src, "vertexAttribs");
     uint32_t length;
     FREGetArrayLength(VertexAttribs, &length);
+    ///
+    std::vector<LLGL::VertexAttribute> nativeVertexAttribs;
     nativeVertexAttribs.resize(length);
+    //
     for (int i = 0; i < length; ++i) {
         FREObject vertexAttrib = ANEutils->getArrayIndex(VertexAttribs, i);
         Convert(nativeVertexAttribs[i], vertexAttrib);
     }
-
+    ///
     dst.size = ANEutils->getInt32(src,"size");
     dst.stride = ANEutils->getInt32(src, "stride");
     dst.format = static_cast<LLGL::Format>(ANEutils->getInt32(src, "format"));

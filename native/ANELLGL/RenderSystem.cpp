@@ -67,10 +67,10 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
     }
 
 
+    std::vector<AIRVector> cVector = ConvertArray(Air_vertices);
 
     LLGL::BufferDescriptor nativeDesc;
-    std::vector<LLGL::VertexAttribute> nativeVertexAttribs;
-    Convert(nativeDesc, Air_vertexBufferDesc, nativeVertexAttribs);
+    Convert(nativeDesc, Air_vertexBufferDesc);
     LLGL::Buffer* vertexBuffer = native->CreateBuffer(nativeDesc, vertices);
 
 

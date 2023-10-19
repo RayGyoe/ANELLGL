@@ -84,6 +84,7 @@ package
 					
 					var  s:Number = 0.5;
 					var vertices:Array = [
+						new Vector2(Format.RG32Float,[ 0,  s]),
 						[ [  0,  s ], [ 255, 0, 0, 255 ] ], // 1st vertex: center-top, red
 						[ [  s, -s ], [ 0, 255, 0, 255 ] ], // 2nd vertex: right-bottom, green
 						[ [ -s, -s ], [ 0, 0, 255, 255 ] ], // 3rd vertex: left-bottom, blue

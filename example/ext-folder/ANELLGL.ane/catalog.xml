@@ -1,158 +1,153 @@
-<?xml version="1.0" encoding ="utf-8"?>
+<?xml version="1.0" ?>
 <swc xmlns="http://www.adobe.com/flash/swccatalog/9">
-  <versions>
-    <swc version="1.2" />
-    <flex version="4.6.0" build="23201" minimumSupportedVersion="3.0.0" />
-  </versions>
-  <features>
-    <feature-script-deps />
-    <feature-files />
-  </features>
-  <libraries>
-    <library path="library.swf">
-      <script name="_4aec8ce74d8e4b9642ff52e4bd753ed676070e37dc0ea9d86ab148c3cadad28e_flash_display_Sprite" mod="1697650717934" signatureChecksum="776764653" >
-        <def id="_4aec8ce74d8e4b9642ff52e4bd753ed676070e37dc0ea9d86ab148c3cadad28e_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/BindFlags" mod="1697647611598" signatureChecksum="68858053" >
-        <def id="llgl:BindFlags" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/Buffer" mod="1697648405034" signatureChecksum="3771217019" >
-        <def id="llgl:Buffer" /> 
-        <dep id="llgl:BufferDescriptor" type="s" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/RenderSystem" mod="1697648628765" signatureChecksum="75476435" >
-        <def id="llgl:RenderSystem" /> 
-        <dep id="llgl:RendererInfo" type="s" /> 
-        <dep id="llgl:SwapChain" type="s" /> 
-        <dep id="llgl:BufferDescriptor" type="s" /> 
-        <dep id="llgl:RenderingCapabilities" type="s" /> 
-        <dep id="llgl:Buffer" type="s" /> 
-        <dep id="llgl:SwapChainDescriptor" type="s" /> 
-        <dep id="flash.external:ExtensionContext" type="s" /> 
-        <dep id="llgl:RendererInfo" type="e" /> 
-        <dep id="llgl:SwapChain" type="e" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="llgl:RenderingCapabilities" type="e" /> 
-        <dep id="llgl:Buffer" type="e" /> 
-        <dep id="flash.events:EventDispatcher" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/ShadingLanguage" mod="1697643524707" signatureChecksum="3814437280" >
-        <def id="llgl:ShadingLanguage" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/RenderingLimits" mod="1697643896869" signatureChecksum="590811332" >
-        <def id="llgl:RenderingLimits" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/BufferDescriptor" mod="1697645438726" signatureChecksum="1140938823" >
-        <def id="llgl:BufferDescriptor" /> 
-        <dep id="__AS3__.vec:Vector" type="s" /> 
-        <dep id="llgl:VertexAttribute" type="s" /> 
-        <dep id="llgl:Format" type="e" /> 
-        <dep id="llgl:BindFlags" type="e" /> 
-        <dep id="llgl:CPUAccessFlags" type="e" /> 
-        <dep id="llgl:MiscFlags" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/MiscFlags" mod="1697645062987" signatureChecksum="782459078" >
-        <def id="llgl:MiscFlags" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/RenderingFeatures" mod="1697643900030" signatureChecksum="3918430769" >
-        <def id="llgl:RenderingFeatures" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/RenderingCapabilities" mod="1697643538804" signatureChecksum="1418550942" >
-        <def id="llgl:RenderingCapabilities" /> 
-        <dep id="llgl:RenderingFeatures" type="s" /> 
-        <dep id="llgl:RenderingLimits" type="s" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/SwapChainDescriptor" mod="1697480436494" signatureChecksum="3751565602" >
-        <def id="llgl:SwapChainDescriptor" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/Format" mod="1697643300734" signatureChecksum="3497742365" >
-        <def id="llgl:Format" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/VertexFormat" mod="1697647413576" signatureChecksum="3273872285" >
-        <def id="llgl:VertexFormat" /> 
-        <dep id="__AS3__.vec:Vector" type="s" /> 
-        <dep id="llgl:VertexAttribute" type="s" /> 
-        <dep id="__AS3__.vec:Vector" type="e" /> 
-        <dep id="llgl:VertexAttribute" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/VertexAttribute" mod="1697650365521" signatureChecksum="605255833" >
-        <def id="llgl:VertexAttribute" /> 
-        <dep id="llgl:Format" type="e" /> 
-        <dep id="ANELLGL" type="e" /> 
-        <dep id="llgl:SystemValue" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/RendererInfo" mod="1697470800265" signatureChecksum="1063012864" >
-        <def id="llgl:RendererInfo" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="ANELLGL" mod="1697476612186" signatureChecksum="3933508947" >
-        <def id="ANELLGL" /> 
-        <dep id="__AS3__.vec:Vector" type="s" /> 
-        <dep id="flash.events:StatusEvent" type="s" /> 
-        <dep id="flash.external:ExtensionContext" type="s" /> 
-        <dep id="llgl:RenderSystem" type="s" /> 
-        <dep id="trace" type="e" /> 
-        <dep id="__AS3__.vec:Vector" type="e" /> 
-        <dep id="flash.events:StatusEvent" type="e" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="flash.external:ExtensionContext" type="e" /> 
-        <dep id="llgl:RenderSystem" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/SwapChain" mod="1697637781851" signatureChecksum="316038618" >
-        <def id="llgl:SwapChain" /> 
-        <dep id="flash.display:NativeWindow" type="s" /> 
-        <dep id="flash.external:ExtensionContext" type="s" /> 
-        <dep id="llgl:RenderSystem" type="s" /> 
-        <dep id="Error" type="e" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/CPUAccessFlags" mod="1697644992772" signatureChecksum="2930850450" >
-        <def id="llgl:CPUAccessFlags" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <script name="llgl/SystemValue" mod="1697646205104" signatureChecksum="290182233" >
-        <def id="llgl:SystemValue" /> 
-        <dep id="Object" type="i" /> 
-        <dep id="AS3" type="n" /> 
-      </script>
-      <digests>
-        <digest type="SHA-256" signed="false" value="f7a314c390956109d78239e22fdcc130c1dc5bf2d020304a77841d84233314ff"   />
-      </digests>
-    </library>
-  </libraries>
-  <files>
-  </files>
+    <versions>
+        <swc version="1.2"/>
+        <compiler name="ActionScript Compiler" version="2.3.0" build="0"/>
+    </versions>
+    <features>
+        <feature-script-deps/>
+    </features>
+    <libraries>
+        <library path="library.swf">
+            <script name="ANELLGL" mod="1697701120272">
+                <def id="ANELLGL"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Error" type="e"/>
+                <dep id="Function" type="s"/>
+                <dep id="Object" type="i"/>
+                <dep id="String" type="e"/>
+                <dep id="__AS3__.vec:Vector" type="e"/>
+                <dep id="flash.events:StatusEvent" type="s"/>
+                <dep id="flash.external:ExtensionContext" type="s"/>
+                <dep id="int" type="e"/>
+                <dep id="llgl:RenderSystem" type="e"/>
+                <dep id="trace" type="e"/>
+            </script>
+            <script name="llgl/BindFlags" mod="1697701120273">
+                <def id="llgl:BindFlags"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/Buffer" mod="1697701120273">
+                <def id="llgl:Buffer"/>
+                <dep id="Number" type="s"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:BufferDescriptor" type="s"/>
+            </script>
+            <script name="llgl/BufferDescriptor" mod="1697701120274">
+                <def id="llgl:BufferDescriptor"/>
+                <dep id="Object" type="i"/>
+                <dep id="__AS3__.vec:Vector" type="s"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:BindFlags" type="e"/>
+                <dep id="llgl:CPUAccessFlags" type="e"/>
+                <dep id="llgl:Format" type="e"/>
+                <dep id="llgl:MiscFlags" type="e"/>
+                <dep id="llgl:VertexAttribute" type="s"/>
+                <dep id="uint" type="s"/>
+            </script>
+            <script name="llgl/CPUAccessFlags" mod="1697701120274">
+                <def id="llgl:CPUAccessFlags"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/Format" mod="1697701120275">
+                <def id="llgl:Format"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/MiscFlags" mod="1697701120276">
+                <def id="llgl:MiscFlags"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/RenderSystem" mod="1697701120276">
+                <def id="llgl:RenderSystem"/>
+                <dep id="Array" type="s"/>
+                <dep id="Boolean" type="e"/>
+                <dep id="Error" type="e"/>
+                <dep id="String" type="s"/>
+                <dep id="flash.events:EventDispatcher" type="i"/>
+                <dep id="flash.external:ExtensionContext" type="s"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:Buffer" type="e"/>
+                <dep id="llgl:BufferDescriptor" type="s"/>
+                <dep id="llgl:RendererInfo" type="s"/>
+                <dep id="llgl:RenderingCapabilities" type="e"/>
+                <dep id="llgl:SwapChain" type="s"/>
+                <dep id="llgl:SwapChainDescriptor" type="s"/>
+            </script>
+            <script name="llgl/RendererInfo" mod="1697701120277">
+                <def id="llgl:RendererInfo"/>
+                <dep id="Object" type="i"/>
+                <dep id="String" type="s"/>
+                <dep id="__AS3__.vec:Vector" type="e"/>
+            </script>
+            <script name="llgl/RenderingCapabilities" mod="1697701120278">
+                <def id="llgl:RenderingCapabilities"/>
+                <dep id="Object" type="i"/>
+                <dep id="__AS3__.vec:Vector" type="e"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:RenderingFeatures" type="s"/>
+                <dep id="llgl:RenderingLimits" type="s"/>
+            </script>
+            <script name="llgl/RenderingFeatures" mod="1697701120280">
+                <def id="llgl:RenderingFeatures"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Object" type="i"/>
+            </script>
+            <script name="llgl/RenderingLimits" mod="1697701120282">
+                <def id="llgl:RenderingLimits"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+                <dep id="uint" type="s"/>
+            </script>
+            <script name="llgl/ShadingLanguage" mod="1697701120282">
+                <def id="llgl:ShadingLanguage"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/SwapChain" mod="1697701120283">
+                <def id="llgl:SwapChain"/>
+                <dep id="Boolean" type="e"/>
+                <dep id="Error" type="e"/>
+                <dep id="Object" type="i"/>
+                <dep id="flash.display:NativeWindow" type="s"/>
+                <dep id="flash.external:ExtensionContext" type="s"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:RenderSystem" type="s"/>
+            </script>
+            <script name="llgl/SwapChainDescriptor" mod="1697701120284">
+                <def id="llgl:SwapChainDescriptor"/>
+                <dep id="Boolean" type="s"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/SystemValue" mod="1697701120285">
+                <def id="llgl:SystemValue"/>
+                <dep id="Object" type="i"/>
+                <dep id="int" type="s"/>
+            </script>
+            <script name="llgl/VertexAttribute" mod="1697709721092">
+                <def id="llgl:VertexAttribute"/>
+                <dep id="ANELLGL" type="e"/>
+                <dep id="Object" type="i"/>
+                <dep id="String" type="s"/>
+                <dep id="int" type="e"/>
+                <dep id="llgl:Format" type="e"/>
+                <dep id="llgl:SystemValue" type="e"/>
+            </script>
+            <script name="llgl/VertexFormat" mod="1697701120287">
+                <def id="llgl:VertexFormat"/>
+                <dep id="Object" type="i"/>
+                <dep id="__AS3__.vec:Vector" type="e"/>
+                <dep id="int" type="s"/>
+                <dep id="llgl:VertexAttribute" type="e"/>
+            </script>
+            <digests>
+                <digest type="SHA-256" signed="false" value="07a96ebb030b4c17481010612d5843b0f374908946a5cdd07d18b6e98dd41d44"/>
+            </digests>
+        </library>
+    </libraries>
 </swc>

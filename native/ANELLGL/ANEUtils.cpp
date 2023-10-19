@@ -14,6 +14,9 @@ std::string ANEUtils::getString(FREObject freObject) {
 
 	if (isFREResultOK(status, "Could not convert UTF8."))
 		return std::string(val, val + string1Length);
+
+
+	printf("\n getString convert error");
 	return "";
 }
 
@@ -51,7 +54,7 @@ bool ANEUtils::getBool(FREObject freObject) {
 
 bool ANEUtils::isFREResultOK(FREResult errorCode, std::string errorMessage) {
 	if (FRE_OK == errorCode) return true;
-	printf("isFREResultOK = %s", errorMessage.c_str());
+	printf("\nisFREResult = %s", errorMessage.c_str());
 	return false;
 }
 
