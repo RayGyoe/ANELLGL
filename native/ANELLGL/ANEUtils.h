@@ -132,6 +132,11 @@ public:
 	}
 
 	uint32_t getUInt32(FREObject freObject);
+	uint32_t getUInt32(FREObject target, std::string key) {
+		return getUInt32(getObject(target, key));
+	}
+
+
 	int32_t getInt32(FREObject freObject);
 	int32_t getInt32(FREObject target, std::string key) {
 		return getInt32(getObject(target,key));
@@ -144,6 +149,9 @@ public:
 
 	bool getBool(FREObject freObject);
 	double getDouble(FREObject freObject);
+	double getDouble(FREObject target, std::string key) {
+		return getDouble(getObject(target, key));
+	}
 
 	std::string intToStdString(int value);
 	std::string string_To_UTF8(const std::string& str);

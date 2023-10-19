@@ -9,27 +9,48 @@ package llgl
 	 */
 	public class SwapChain
 	{
-		private var _ctx:ExtensionContext;
+		private var _SwapChainPtr:Number;
 		
-		private var _renderSystem:RenderSystem;
 		
-		public function SwapChain(ctx:ExtensionContext, renderSystem:RenderSystem)
+		private var _rendererIndex:int;
+		public function get SwapChainPtr():Number 
 		{
-			_ctx = ctx;
-			if (!_ctx)
-			{
-				throw Error("ANE not init, Initialize from ANELLGL.RenderSystem");
-			}
-			_renderSystem = renderSystem;
+			return _SwapChainPtr;
+		}
+		
+		public function get rendererIndex():int 
+		{
+			return _rendererIndex;
+		}
+		
+		
+		public function SwapChain(SwapChainPtr:Number, rendererIndex:int)
+		{
+			_SwapChainPtr = SwapChainPtr;
+			_rendererIndex = rendererIndex;
 		}
 		
 		public function SetVsyncInterval(vsyncInterval:int):Boolean
 		{
-			return _ctx.call("SwapChain_Function", _renderSystem.GetRendererIndex(), "SetVsyncInterval", vsyncInterval) as Boolean;
+			if (ANELLGL.getInstance().isSupported)
+			{
+				ANELLGL.getInstance().context.call("SwapChain_Function", _rendererIndex, "SetVsyncInterval", vsyncInterval) as Boolean;
+			}
+			return false;
 		}
 		
 		public function GLWindowToNativeWindow(nativeWindow:NativeWindow,x:int=0,y:int =0):void{
-			_ctx.call("SwapChain_Function", _renderSystem.GetRendererIndex(), "GLWindowToNativeWindow", nativeWindow, x, y);
+			if (ANELLGL.getInstance().isSupported)
+			{
+				ANELLGL.getInstance().context.call("SwapChain_Function", _rendererIndex, "GLWindowToNativeWindow", nativeWindow, x, y);
+			}
+		}
+		
+		public function Present():void{
+			if (ANELLGL.getInstance().isSupported)
+			{
+				ANELLGL.getInstance().context.call("SwapChain_Function", _rendererIndex, "Present");
+			}
 		}
 	}
 

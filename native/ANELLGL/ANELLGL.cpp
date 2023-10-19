@@ -74,6 +74,7 @@ extern "C" {
         if (GetRendererID!=-1)
         {
             renderers[index] = renderer;
+            renderer->rendererIndex = index;
             return ANEutils->AS_int(GetRendererID);
         }
         return ANEutils->AS_int(0);
@@ -131,12 +132,19 @@ extern "C" {
                     swapChainDesc.stencilBits = ANEutils->getInt32(stencilBits); // We don't need a stencil buffer for this example
                     swapChainDesc.samples = ANEutils->getInt32(samples); // check if LLGL adapts sample count that is too high
                 }
-                return ANEutils->AS_Boolean(renderer->CreateSwapChain(swapChainDesc));
+                return renderer->CreateSwapChain(swapChainDesc);
             }
             else if (funName  == "CreateBuffer") {
-
                return renderer->CreateBuffer(argv[2], argv[3]);
-
+            }
+            else if (funName == "CreateShader") {
+                return renderer->CreateShader(argv[2]);
+            }
+            else if (funName == "CreatePipelineState") {
+                return renderer->CreatePipelineState(argv[2]);
+            }
+            else if (funName == "CreateCommandBuffer") {
+                return renderer->CreateCommandBuffer(argv[2]);
             }
             else if (funName == "GetRenderingCaps") {
 
@@ -246,9 +254,56 @@ extern "C" {
             {
                 renderer->addToNativeWindow(argv[2],ANEutils->getInt32(argv[3]), ANEutils->getInt32(argv[4]));
             }
+            else if (funName == "Present") {
+                renderer->swapChain->Present();
+            }
         }
         return NULL;
     }
+
+
+
+    FREObject CommandBuffer_Function(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+    {
+        double _CommandBufferPtr = ANEutils->getDouble(argv[0]);
+        std::string funName = ANEutils->getString(argv[1]);
+        if (debug)printf("\n%s %s===  %s", TAG, "CommandBuffer_Function", funName.c_str());
+
+        LLGL::CommandBuffer* commands =  reinterpret_cast<LLGL::CommandBuffer*>((uintptr_t)_CommandBufferPtr);
+
+        if (funName == "Begin")
+        {
+            commands->Begin();
+        }
+        else if (funName == "EndRenderPass")
+        {
+            commands->EndRenderPass();
+        }
+        else if (funName == "End") {
+            commands->End();
+        }
+        else if (funName == "Draw") {
+            commands->Draw((uint32_t)ANEutils->getInt32(argv[2]), (uint32_t)ANEutils->getInt32(argv[3]));
+        }
+        else if (funName == "Clear") {
+            commands->Clear((uint32_t)ANEutils->getInt32(argv[2]));
+        }
+        else if (funName == "SetVertexBuffer") {
+            LLGL::Buffer* buffer = reinterpret_cast<LLGL::Buffer*>((uintptr_t)ANEutils->getDouble(argv[2], "BufferPtr"));
+            commands->SetVertexBuffer(*buffer);
+        }
+        else if (funName == "BeginRenderPass") {
+            LLGL::SwapChain* swapChain = reinterpret_cast<LLGL::SwapChain*>((uintptr_t)ANEutils->getDouble(argv[2], "SwapChainPtr"));
+            commands->BeginRenderPass(*swapChain);
+        }
+        else if (funName == "SetPipelineState") {
+            LLGL::PipelineState* pipeline = reinterpret_cast<LLGL::PipelineState*>((uintptr_t)ANEutils->getDouble(argv[2], "PipelinePtr"));
+            commands->SetPipelineState(*pipeline);
+        }
+        return NULL;
+    }
+    
+
 
 
     FREObject Auxiliary_Function(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -457,6 +512,7 @@ extern "C" {
 
             vertShader = renderer->CreateShader(vertShaderDesc);
             fragShader = renderer->CreateShader(fragShaderDesc);
+            
 
             for (auto shader : { vertShader, fragShader })
             {
@@ -562,8 +618,9 @@ extern "C" {
             { (const uint8_t*)"unloadRenderSystem",				NULL, &unloadRenderSystem },
             { (const uint8_t*)"RenderSystem_Function",				NULL, &RenderSystem_Function },
             { (const uint8_t*)"SwapChain_Function",				NULL, &SwapChain_Function },
-            
 
+            { (const uint8_t*)"CommandBuffer_Function",				NULL, &CommandBuffer_Function },
+            
             //¸¨Öúº¯Êý---
             { (const uint8_t*)"Auxiliary_Function",				NULL, &Auxiliary_Function },
             

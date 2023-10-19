@@ -20,34 +20,41 @@ void RenderSystem::UnLoad()
     LLGL::RenderSystem::Unload((LLGL::RenderSystemPtr &&)native);
 }
 
-bool RenderSystem::CreateSwapChain(LLGL::SwapChainDescriptor swapChainDesc)
+FREObject RenderSystem::CreateSwapChain(LLGL::SwapChainDescriptor swapChainDesc)
 {
+   
+    FREObject Air_class;
+
     swapChain = native->CreateSwapChain(swapChainDesc);
+
     std::cout << "Swap Chain Format:    " << LLGL::ToString(swapChain->GetColorFormat()) << std::endl;
     std::cout << "Depth/Stencil Format: " << LLGL::ToString(swapChain->GetDepthStencilFormat()) << std::endl;
 
-    return true;
+    FREObject argv[2] = {
+        ANEutils->AS_Number((intptr_t)swapChain),
+        ANEutils->AS_int(rendererIndex),
+    };
+    FRENewObject((const uint8_t*)"llgl.SwapChain", 2, argv, &Air_class, NULL);
+    return Air_class;
 }
 
 FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject Air_vertices)
 {
+    /*
     // Vertex data structure
     struct Vertex
     {
         float   position[2];
         uint8_t color[4];
     };
-
     // Vertex data (3 vertices for our triangle)
     const float s = 0.5f;
-
     Vertex vertices[] =
     {
         { {  0,  s }, { 255, 0, 0, 255 } }, // 1st vertex: center-top, red
         { {  s, -s }, { 0, 255, 0, 255 } }, // 2nd vertex: right-bottom, green
         { { -s, -s }, { 0, 0, 255, 255 } }, // 3rd vertex: left-bottom, blue
     };
-
     // Vertex format
     LLGL::VertexFormat vertexFormat;
     // Append 2D float vector for position attribute
@@ -65,15 +72,16 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
         vertexBufferDesc.bindFlags = LLGL::BindFlags::VertexBuffer;    // Enables the buffer to be bound to a vertex buffer slot
         vertexBufferDesc.vertexAttribs = vertexFormat.attributes;          // Vertex format layout
     }
+    */
 
 
-    std::vector<AIRVector> cVector = ConvertArray(Air_vertices);
-
+    auto nativeVertices = ConvertArray(Air_vertices);
+    /////////////////////////////////////////
     LLGL::BufferDescriptor nativeDesc;
     Convert(nativeDesc, Air_vertexBufferDesc);
-    LLGL::Buffer* vertexBuffer = native->CreateBuffer(nativeDesc, vertices);
-
-
+    nativeDesc.size = sizeof(nativeVertices);
+    LLGL::Buffer* vertexBuffer = native->CreateBuffer(nativeDesc, &nativeVertices);
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     FREObject Air_vertexBuffer;
     FREObject argv[1] = {
         ANEutils->AS_Number((intptr_t)vertexBuffer)
@@ -83,6 +91,53 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
     FRESetObjectProperty(Air_vertexBuffer, (const uint8_t*)"desc",Air_vertexBufferDesc, NULL);
     return Air_vertexBuffer;
 }
+
+FREObject RenderSystem::CreateShader(FREObject Air_shaderDesc)
+{
+    FREObject Air_shader;
+
+    LLGL::ShaderDescriptor shaderDesc;
+    Convert(shaderDesc, Air_shaderDesc);
+    LLGL::Shader* shader = native->CreateShader(shaderDesc);
+
+    FREObject argv[2] = {
+        ANEutils->AS_Number((intptr_t)shader),
+        ANEutils->AS_int((int)shader->GetType()),
+    };
+    FRENewObject((const uint8_t*)"llgl.Shader", 2, argv, &Air_shader, NULL);
+    return Air_shader;
+}
+
+FREObject RenderSystem::CreatePipelineState(FREObject Air_graphicsPipelineDesc)
+{
+    FREObject Air_class;
+    LLGL::GraphicsPipelineDescriptor pipelineDesc;
+    {
+        pipelineDesc.renderPass = swapChain->GetRenderPass();
+        Convert(pipelineDesc, Air_graphicsPipelineDesc);
+    }
+    LLGL::PipelineState* pipeline = native->CreatePipelineState(pipelineDesc);
+    //
+
+    FREObject argv[1] = {
+        ANEutils->AS_Number((intptr_t)pipeline),
+    };
+    FRENewObject((const uint8_t*)"llgl.PipelineState", 1, argv, &Air_class, NULL);
+    return Air_class;
+}
+
+FREObject RenderSystem::CreateCommandBuffer(FREObject Air_commandBufferDesc)
+{
+    FREObject Air_commandBuffer;
+    LLGL::CommandBuffer* commands = native->CreateCommandBuffer(LLGL::CommandBufferFlags::ImmediateSubmit);
+    FREObject argv[1] = {
+        ANEutils->AS_Number((intptr_t)commands),
+    };
+    FRENewObject((const uint8_t*)"llgl.CommandBuffer", 1, argv, &Air_commandBuffer, NULL);
+    return Air_commandBuffer;
+}
+
+
 
 void RenderSystem::addToNativeWindow(FREObject AirWindow,int x,int y)
 {

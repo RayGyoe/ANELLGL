@@ -16,7 +16,6 @@ package llgl
 		private var _rendererID:int;
 		private var _rendererInfo:RendererInfo;
 		private var _name:String;
-		private var _swapChain:SwapChain;
 		
 		public function RenderSystem(ctx:ExtensionContext, rendererIndex:int, rendererID:int)
 		{
@@ -53,17 +52,28 @@ package llgl
 		
 		public function CreateSwapChain(swapChainDescriptor:SwapChainDescriptor):SwapChain
 		{
-			if (!_swapChain && _ctx.call("RenderSystem_Function", _rendererIndex, "CreateSwapChain", swapChainDescriptor) as Boolean)
-			{
-				_swapChain = new SwapChain(_ctx, this);
-			}
-			return _swapChain;
+			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreateSwapChain", swapChainDescriptor) as SwapChain;
 		}
-		
 		
 		public function CreateBuffer(desc:BufferDescriptor,vertices:Array):Buffer
 		{
 			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreateBuffer", desc, vertices) as Buffer;
+		}
+		
+		
+		public function CreateShader(desc:ShaderDescriptor):Shader
+		{
+			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreateShader", desc) as Shader;
+		}
+		
+		public function CreatePipelineState(desc:GraphicsPipelineDescriptor):PipelineState
+		{
+			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreatePipelineState", desc) as PipelineState;
+		}
+		
+		public function CreateCommandBuffer(desc:CommandBufferDescriptor):CommandBuffer
+		{
+			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreateCommandBuffer", desc) as CommandBuffer;
 		}
 		
 		
