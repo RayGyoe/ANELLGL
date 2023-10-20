@@ -105,13 +105,22 @@ extern "C" {
                 const auto& info = renderer->native->GetName();
                 std::cout << "Renderer:             " << info << std::endl;
                 return ANEutils->AS_String(info);
-            }else  if (funName == "GetRendererInfo")
+            }else if (funName == "GetRendererInfo")
             {
                 const auto& info = renderer->native->GetRendererInfo();
                 std::cout << "Renderer:             " << info.rendererName << std::endl;
                 std::cout << "Device:               " << info.deviceName << std::endl;
                 std::cout << "Vendor:               " << info.vendorName << std::endl;
                 std::cout << "Shading Language:     " << info.shadingLanguageName << std::endl;
+            }else if (funName == "GetCommandQueue")
+            {
+                LLGL::CommandQueue* queue = renderer->native->GetCommandQueue();
+                FREObject Air_class;
+                FREObject argv[1] = {
+                    ANEutils->AS_Number((intptr_t)queue),
+                };
+                FRENewObject((const uint8_t*)"llgl.CommandQueue", 1, argv, &Air_class, NULL);
+                return Air_class;
             }
             else if (funName == "CreateSwapChain")
             {
@@ -261,13 +270,29 @@ extern "C" {
         return NULL;
     }
 
+    
 
+
+    FREObject CommandQueue_Function(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+    {
+        double _CommandQueuePtr = ANEutils->getDouble(argv[0]);
+        std::string funName = ANEutils->getString(argv[1]);
+
+        LLGL::CommandQueue* queue = reinterpret_cast<LLGL::CommandQueue*>((uintptr_t)_CommandQueuePtr);
+
+        if (funName == "Submit")
+        {
+            LLGL::CommandBuffer* commands = reinterpret_cast<LLGL::CommandBuffer*>((uintptr_t)ANEutils->getDouble(argv[2], "CommandBufferPtr"));
+            queue->Submit(*commands);
+        }
+        return NULL;
+    }
 
     FREObject CommandBuffer_Function(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
     {
         double _CommandBufferPtr = ANEutils->getDouble(argv[0]);
         std::string funName = ANEutils->getString(argv[1]);
-        if (debug)printf("\n%s %s===  %s", TAG, "CommandBuffer_Function", funName.c_str());
+        //if (debug)printf("\n%s %s===  %s", TAG, "CommandBuffer_Function", funName.c_str());
 
         LLGL::CommandBuffer* commands =  reinterpret_cast<LLGL::CommandBuffer*>((uintptr_t)_CommandBufferPtr);
 
@@ -290,16 +315,27 @@ extern "C" {
         }
         else if (funName == "SetVertexBuffer") {
             LLGL::Buffer* buffer = reinterpret_cast<LLGL::Buffer*>((uintptr_t)ANEutils->getDouble(argv[2], "BufferPtr"));
+
+            std::cout << "\n buffer=" << buffer->GetDesc().size << std::endl;
             commands->SetVertexBuffer(*buffer);
         }
         else if (funName == "BeginRenderPass") {
             LLGL::SwapChain* swapChain = reinterpret_cast<LLGL::SwapChain*>((uintptr_t)ANEutils->getDouble(argv[2], "SwapChainPtr"));
+            std::cout << "\n swapChain=" << swapChain->GetResolution().width << std::endl;
             commands->BeginRenderPass(*swapChain);
         }
         else if (funName == "SetPipelineState") {
             LLGL::PipelineState* pipeline = reinterpret_cast<LLGL::PipelineState*>((uintptr_t)ANEutils->getDouble(argv[2], "PipelinePtr"));
+            std::cout << "\n pipeline=" << pipeline->GetInterfaceID() << std::endl;
+
             commands->SetPipelineState(*pipeline);
         }
+        else if (funName == "SetViewport") {
+            LLGL::Viewport viewport;
+            Convert(viewport, argv[2]);
+            commands->SetViewport(viewport);
+        }
+        
         return NULL;
     }
     
@@ -620,6 +656,7 @@ extern "C" {
             { (const uint8_t*)"SwapChain_Function",				NULL, &SwapChain_Function },
 
             { (const uint8_t*)"CommandBuffer_Function",				NULL, &CommandBuffer_Function },
+            { (const uint8_t*)"CommandQueue_Function",				NULL, &CommandQueue_Function },
             
             //¸¨Öúº¯Êý---
             { (const uint8_t*)"Auxiliary_Function",				NULL, &Auxiliary_Function },

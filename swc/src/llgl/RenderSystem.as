@@ -76,6 +76,11 @@ package llgl
 			return _ctx.call("RenderSystem_Function", _rendererIndex, "CreateCommandBuffer", desc) as CommandBuffer;
 		}
 		
+		public function GetCommandQueue():CommandQueue
+		{
+			return _ctx.call("RenderSystem_Function", _rendererIndex, "GetCommandQueue") as CommandQueue;
+		}
+		
 		
 		public function GetRendererID():int
 		{

@@ -58,6 +58,13 @@ package llgl
 				ANELLGL.getInstance().context.call("CommandBuffer_Function", _CommandBufferPtr, "Clear", flags);
 			}
 		}
+		public function SetViewport(viewport:Viewport):void
+		{
+			if (ANELLGL.getInstance().isSupported)
+			{
+				ANELLGL.getInstance().context.call("CommandBuffer_Function", _CommandBufferPtr, "SetViewport", viewport);
+			}
+		}
 		
 		public function SetVertexBuffer(buffer:Buffer):void
 		{

@@ -40,7 +40,7 @@ FREObject RenderSystem::CreateSwapChain(LLGL::SwapChainDescriptor swapChainDesc)
 
 FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject Air_vertices)
 {
-    /*
+    
     // Vertex data structure
     struct Vertex
     {
@@ -55,6 +55,15 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
         { {  s, -s }, { 0, 255, 0, 255 } }, // 2nd vertex: right-bottom, green
         { { -s, -s }, { 0, 0, 255, 255 } }, // 3rd vertex: left-bottom, blue
     };
+
+
+    float arrayData[18] = {
+        0, s, 255, 0, 0, 255,
+        s, -s, 0, 255, 0, 255,
+        - s, -s,0, 0, 255, 255
+    };
+
+    /*
     // Vertex format
     LLGL::VertexFormat vertexFormat;
     // Append 2D float vector for position attribute
@@ -79,8 +88,8 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
     /////////////////////////////////////////
     LLGL::BufferDescriptor nativeDesc;
     Convert(nativeDesc, Air_vertexBufferDesc);
-    nativeDesc.size = sizeof(nativeVertices);
-    LLGL::Buffer* vertexBuffer = native->CreateBuffer(nativeDesc, &nativeVertices);
+    nativeDesc.size = sizeof(vertices);
+    LLGL::Buffer* vertexBuffer = native->CreateBuffer(nativeDesc, &vertices);
     ///////////////////////////////////////////////////////////////////////////////////////////////
     FREObject Air_vertexBuffer;
     FREObject argv[1] = {
@@ -100,6 +109,13 @@ FREObject RenderSystem::CreateShader(FREObject Air_shaderDesc)
     Convert(shaderDesc, Air_shaderDesc);
     LLGL::Shader* shader = native->CreateShader(shaderDesc);
 
+    if (auto report = shader->GetReport()) {
+
+        if (report->HasErrors()) {
+            std::cerr << "CreateShader error \n" << report->GetText() << std::endl;
+        }
+    }
+
     FREObject argv[2] = {
         ANEutils->AS_Number((intptr_t)shader),
         ANEutils->AS_int((int)shader->GetType()),
@@ -112,12 +128,18 @@ FREObject RenderSystem::CreatePipelineState(FREObject Air_graphicsPipelineDesc)
 {
     FREObject Air_class;
     LLGL::GraphicsPipelineDescriptor pipelineDesc;
-    {
-        pipelineDesc.renderPass = swapChain->GetRenderPass();
-        Convert(pipelineDesc, Air_graphicsPipelineDesc);
-    }
+    Convert(pipelineDesc, Air_graphicsPipelineDesc);
+    pipelineDesc.renderPass = swapChain->GetRenderPass();
     LLGL::PipelineState* pipeline = native->CreatePipelineState(pipelineDesc);
-    //
+    if (auto report = pipeline->GetReport())
+    {
+        if (report->HasErrors())
+        {
+            std::cout << "CreatePipelineState error \n" << report->GetText() << std::endl;
+        }
+    }
+
+
 
     FREObject argv[1] = {
         ANEutils->AS_Number((intptr_t)pipeline),
@@ -136,7 +158,6 @@ FREObject RenderSystem::CreateCommandBuffer(FREObject Air_commandBufferDesc)
     FRENewObject((const uint8_t*)"llgl.CommandBuffer", 1, argv, &Air_commandBuffer, NULL);
     return Air_commandBuffer;
 }
-
 
 
 void RenderSystem::addToNativeWindow(FREObject AirWindow,int x,int y)

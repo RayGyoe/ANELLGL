@@ -47,7 +47,7 @@ package llgl
 			var i:int = attributes.length;
 			while (--i >-1){
 				
-				if (slot == -1)
+				if (slot != -1)
 				{
 					if (attributes[i].slot == slot){
 						attributes[i].stride = stride;

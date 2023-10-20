@@ -1,6 +1,7 @@
 package
 {
 	//import flash.desktop.NativeApplication;
+	import com.vsdevelop.controls.Button;
 	import com.vsdevelop.controls.Fps;
 	import flash.events.Event;
 	import flash.display.Sprite;
@@ -19,6 +20,7 @@ package
 	import llgl.ClearFlags;
 	import llgl.CommandBuffer;
 	import llgl.CommandBufferDescriptor;
+	import llgl.CommandQueue;
 	import llgl.Format;
 	import llgl.GraphicsPipelineDescriptor;
 	import llgl.RenderSystem;
@@ -26,12 +28,14 @@ package
 	import llgl.Shader;
 	import llgl.ShaderDescriptor;
 	import llgl.ShaderType;
+	import llgl.ShadingLanguage;
 	import llgl.SwapChain;
 	import llgl.SwapChainDescriptor;
 	import llgl.VectorData;
 	import llgl.VertexAttribute;
 	import llgl.VertexFormat;
 	import llgl.PipelineState;
+	import llgl.Viewport;
 	
 	/**
 	 * ...
@@ -43,6 +47,15 @@ package
 		private var commands:CommandBuffer;
 		private var pipeline:PipelineState;
 		private var swapChian:SwapChain;
+		private var scd:SwapChainDescriptor;
+		
+		
+		
+		private var testModel:int = 1;
+		private var modules:Vector.<String>;
+		private var btn:Button;
+		private var renderSystem:RenderSystem;
+		private var commandQueue:CommandQueue;
 		
 		public function Main():void
 		{
@@ -56,42 +69,52 @@ package
 			{
 				var file:File = ExtensionContext.getExtensionDirectory("com.vsdevelop.air.extension.llgl");
 				
+				modules = ANELLGL.getInstance().FindModules();
+				trace(modules);
+				
+				
+				
 				trace(file.nativePath);
 				ANELLGL.getInstance().debug = true;
-				stage.addEventListener(MouseEvent.CLICK, click);
+				
+				btn = new Button(null, "Run");
+				btn.x = 100;
+				addChild(btn);
+				btn.addEventListener(MouseEvent.CLICK, click);
 			}
 			addChild(new Fps());
 		}
 		
 		private function initTest():void
 		{
-			var modules:Vector.<String> = ANELLGL.getInstance().FindModules();
-			trace(modules);
 			
 			if (modules && modules.length)
 			{
-				var renderSystem:RenderSystem = ANELLGL.getInstance().loadRenderSystem(modules[1]);
+				renderSystem = ANELLGL.getInstance().loadRenderSystem(modules[0]);
 				trace(renderSystem);
 				if (renderSystem)
 				{
 					trace("GetName", renderSystem.GetName());
 					
-					var scd:SwapChainDescriptor = new SwapChainDescriptor();
+					
+					
+					scd = new SwapChainDescriptor();
 					scd.depthBits = 1;
 					scd.stencilBits = 0;
-					scd.samples = 8;
-					scd.width = stage.stageWidth;
-					scd.height = stage.stageHeight;
+					//scd.samples = 8;
+					scd.width = stage.stageWidth * 0.7;
+					scd.height = stage.stageHeight * 0.7;
 					swapChian = renderSystem.CreateSwapChain(scd);
+					swapChian.SetVsyncInterval(1);
 					
 					trace("GetRendererID", renderSystem.GetRendererID());
 					trace(renderSystem.GetRendererInfo());
-					swapChian.SetVsyncInterval(1);
+					
 					swapChian.GLWindowToNativeWindow(stage.nativeWindow, 120, 120);//
 					//renderSystem->
 					
 					var renderingCaps:RenderingCapabilities = renderSystem.GetRenderingCaps();
-					trace("clippingRange=" + renderingCaps.clippingRange, "renderingCaps.screenOrigin=" + renderingCaps.screenOrigin, renderingCaps.shadingLanguages, renderingCaps.textureFormats);
+					//trace("clippingRange=" + renderingCaps.clippingRange, "renderingCaps.screenOrigin=" + renderingCaps.screenOrigin, renderingCaps.shadingLanguages, renderingCaps.textureFormats);
 					
 					var s:Number = 0.5;
 					var vertices:Array = [[new VectorData(Format.RG32Float, [0, s]), new VectorData(Format.RGBA8UNorm, [255, 0, 0, 255])], // 1st vertex: center-top, red
@@ -117,19 +140,50 @@ package
 					
 					trace(vertexBuffer);
 					
-					var vertShaderDesc:ShaderDescriptor = new ShaderDescriptor(ShaderType.Vertex, File.applicationDirectory.nativePath + "\\Example.hlsl", "VS", "vs_4_0");
-					var fragShaderDesc:ShaderDescriptor = new ShaderDescriptor(ShaderType.Fragment, File.applicationDirectory.nativePath + "\\Example.hlsl", "PS", "ps_4_0");
+					
+					trace("shadingLanguages", renderingCaps.shadingLanguages,"ShadingLanguage",ShadingLanguage.GLSL,ShadingLanguage.HLSL);
+					
+					var vertShaderDesc:ShaderDescriptor;
+					var fragShaderDesc:ShaderDescriptor;
+					
+					
+					if (renderingCaps.shadingLanguages.indexOf(ShadingLanguage.GLSL) != -1)
+					{
+						if (renderingCaps.shadingLanguages.indexOf(ShadingLanguage.GLSL_140) != -1)
+						{
+							vertShaderDesc = new ShaderDescriptor(ShaderType.Vertex, File.applicationDirectory.nativePath + "\\Example.vert");
+							fragShaderDesc  = new ShaderDescriptor(ShaderType.Fragment, File.applicationDirectory.nativePath + "\\Example.frag");
+						}
+						else
+						{
+							vertShaderDesc = new ShaderDescriptor(ShaderType.Vertex, File.applicationDirectory.nativePath + "\\Example.120.vert");
+							fragShaderDesc  = new ShaderDescriptor(ShaderType.Fragment, File.applicationDirectory.nativePath + "\\Example.120.frag");
+						}
+					}
+					else if (renderingCaps.shadingLanguages.indexOf(ShadingLanguage.SPIRV) != -1)
+					{
+						vertShaderDesc = new ShaderDescriptor(ShaderType.Vertex, File.applicationDirectory.nativePath + "\\Example.450core.vert.spv");
+						fragShaderDesc  = new ShaderDescriptor(ShaderType.Fragment, File.applicationDirectory.nativePath + "\\Example.450core.frag.spv");
+					}
+					else if (renderingCaps.shadingLanguages.indexOf(ShadingLanguage.HLSL ) != -1)
+					{
+						vertShaderDesc = new ShaderDescriptor(ShaderType.Vertex, File.applicationDirectory.nativePath + "\\Example.hlsl", "VS", "vs_4_0");
+						fragShaderDesc  = new ShaderDescriptor(ShaderType.Fragment, File.applicationDirectory.nativePath + "\\Example.hlsl", "PS", "ps_4_0");
+					}
 					vertShaderDesc.vertex.inputAttribs = vertexFormat.attributes;
+					
+					trace(fragShaderDesc.source);
 					var vertShader:Shader = renderSystem.CreateShader(vertShaderDesc);
 					var fragShader:Shader = renderSystem.CreateShader(fragShaderDesc);
 					
-					trace(vertShader.ShaderPtr, fragShader.ShaderPtr);
+					trace("vertShader",vertShader.ShaderPtr, "fragShader",fragShader.ShaderPtr);
 					
 					var pipelineDesc:GraphicsPipelineDescriptor = new GraphicsPipelineDescriptor();
 					pipelineDesc.vertexShader = vertShader;
 					pipelineDesc.fragmentShader = fragShader;
-					
 					pipeline = renderSystem.CreatePipelineState(pipelineDesc);
+					
+					commandQueue = renderSystem.GetCommandQueue();
 					
 					commands = renderSystem.CreateCommandBuffer(new CommandBufferDescriptor());
 					
@@ -143,34 +197,49 @@ package
 		
 		private function enterFrame(e:Event = null):void
 		{
-			//ANELLGL.getInstance().context.call("EnterFrame");
-			
-			commands.Begin();
-			// Set vertex buffer
-			commands.SetVertexBuffer(vertexBuffer);
-			// Set the swap-chain as the initial render target
-			commands.BeginRenderPass(swapChian);
-			
-			commands.Clear(ClearFlags.Color);
-			
-			// Set graphics pipeline
-			commands.SetPipelineState(pipeline);
-			// Draw triangle with 3 vertices
-			commands.Draw(3, 0);
-			
-			commands.EndRenderPass();
-			commands.End();
-			
-			swapChian.Present();
+			if (testModel == 1){
+				
+				commands.Begin();
+				
+				//var viewport:Viewport = new Viewport(0, 0, scd.width, scd.height);
+				//commands.SetViewport(viewport);
+				// Set vertex buffer
+				commands.SetVertexBuffer(vertexBuffer);
+				// Set the swap-chain as the initial render target
+				commands.BeginRenderPass(swapChian);
+				
+				commands.Clear(ClearFlags.Color);
+				
+				// Set graphics pipeline
+				commands.SetPipelineState(pipeline);
+				// Draw triangle with 3 vertices
+				commands.Draw(3, 0);
+				
+				commands.EndRenderPass();
+				commands.End();
+				
+				
+				commandQueue.Submit(commands);
+				
+				swapChian.Present();
+				
+				
+			}else{
+				ANELLGL.getInstance().context.call("EnterFrame");
+			}
 		}
 		
 		private function click(e:MouseEvent):void
 		{
 			
-			initTest();
+			btn.removeEventListener(MouseEvent.CLICK, click);
 			
-			stage.removeEventListener(MouseEvent.CLICK, click);
-			return;
+			
+			if (testModel == 1){
+				initTest();
+				
+				return;
+			}
 			
 			//OpenGL  Direct3D11   Direct3D12
 			

@@ -108,11 +108,11 @@ static void Convert(LLGL::ShaderDescriptor& dst, FREObject src)
     dst.flags = (long)ANEutils->getUInt32(src, "flags");
 
     std::string entryPoint = ANEutils->getString(src, "entryPoint");
-    if (entryPoint.length()) {
+    if (!entryPoint.empty()) {
         dst.entryPoint = entryPoint.c_str();
     }
     std::string profile = ANEutils->getString(src, "profile");
-    if (profile.length()) {
+    if (!profile.empty()) {
         dst.profile = profile.c_str();
     }
 
@@ -146,4 +146,14 @@ static void Convert(LLGL::GraphicsPipelineDescriptor& dst, FREObject src)
     if (FRE_TYPE_NULL != type) {
         dst.fragmentShader = reinterpret_cast<LLGL::Shader*>((uintptr_t)ANEutils->getDouble(fragmentShader, "ShaderPtr"));
     }
+}
+
+static void Convert(LLGL::Viewport& dst, FREObject src)
+{
+    dst.x = (float)ANEutils->getDouble(src, "x");
+    dst.y = (float)ANEutils->getDouble(src, "y");
+    dst.width = (float)ANEutils->getDouble(src, "width");
+    dst.height = (float)ANEutils->getDouble(src, "height");
+    dst.minDepth = (float)ANEutils->getDouble(src, "minDepth");
+    dst.maxDepth = (float)ANEutils->getDouble(src, "maxDepth");
 }
