@@ -154,6 +154,10 @@ public:
 	}
 
 	std::string intToStdString(int value);
+	std::string utf8_to_ansi(std::string strUTF8);
+	const char* utf8_to_ansi(const char* strUTF8A);
+	std::string UTF8ToANSI(std::string s);
+	char* UTF8ToCharANSI(std::string s);
 	std::string string_To_UTF8(const std::string& str);
 	std::wstring to_wide_string(const std::string & input);
 	std::string to_byte_string(const std::wstring & input);

@@ -14,11 +14,11 @@ std::string ANEUtils::getString(FREObject freObject) {
 
 	if (isFREResultOK(status, "Could not convert UTF8."))
 		return std::string(val, val + string1Length);
-
-
 	printf("\n getString convert error");
 	return "";
 }
+
+
 
 uint32_t ANEUtils::getUInt32(FREObject freObject) {
 	uint32_t result = 0;
@@ -167,7 +167,82 @@ std::string ANEUtils::intToStdString(int value)
 	return str;
 }
 
+std::string ANEUtils::utf8_to_ansi(std::string strUTF8) {
+	UINT nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8.c_str(), -1, NULL, NULL);
+	WCHAR* wszBuffer = new WCHAR[nLen + 1];
+	nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8.c_str(), -1, wszBuffer, nLen);
+	wszBuffer[nLen] = 0;
+	nLen = WideCharToMultiByte(936, NULL, wszBuffer, -1, NULL, NULL, NULL, NULL);
+	CHAR* szBuffer = new CHAR[nLen + 1];
+	nLen = WideCharToMultiByte(936, NULL, wszBuffer, -1, szBuffer, nLen, NULL, NULL);
+	szBuffer[nLen] = 0;
+	strUTF8 = szBuffer;
+	delete[]szBuffer;
+	delete[]wszBuffer;
+	return strUTF8;
+}
+const char* ANEUtils::utf8_to_ansi(const char* strUTF8A) {
+	string strUTF8 = strUTF8A;
+	UINT nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8.c_str(), -1, NULL, NULL);
+	WCHAR* wszBuffer = new WCHAR[nLen + 1];
+	nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8.c_str(), -1, wszBuffer, nLen);
+	wszBuffer[nLen] = 0;
+	nLen = WideCharToMultiByte(936, NULL, wszBuffer, -1, NULL, NULL, NULL, NULL);
+	CHAR* szBuffer = new CHAR[nLen + 1];
+	nLen = WideCharToMultiByte(936, NULL, wszBuffer, -1, szBuffer, nLen, NULL, NULL);
+	szBuffer[nLen] = 0;
+	strUTF8 = szBuffer;
+	delete[]szBuffer;
+	delete[]wszBuffer;
+	char* p = (char*)strUTF8.data();
+	return p;
+}
 
+
+std::string ANEUtils::UTF8ToANSI(std::string s)
+{
+	BSTR    bstrWide;
+	char* pszAnsi;
+	int     nLength;
+	const char* pszCode = s.c_str();
+
+	nLength = MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, NULL, NULL);
+	bstrWide = SysAllocStringLen(NULL, nLength);
+
+	MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, bstrWide, nLength);
+
+	nLength = WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, NULL, 0, NULL, NULL);
+	pszAnsi = new char[nLength];
+
+	WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, pszAnsi, nLength, NULL, NULL);
+	SysFreeString(bstrWide);
+
+	std::string r(pszAnsi);
+	delete[] pszAnsi;
+	return r;
+}
+
+char* ANEUtils::UTF8ToCharANSI(std::string s)
+{
+	BSTR    bstrWide;
+	char* pszAnsi;
+	int     nLength;
+	const char* pszCode = s.c_str();
+
+	nLength = MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, NULL, NULL);
+	bstrWide = SysAllocStringLen(NULL, nLength);
+
+	MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, bstrWide, nLength);
+
+	nLength = WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, NULL, 0, NULL, NULL);
+	pszAnsi = new char[nLength];
+
+	WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, pszAnsi, nLength, NULL, NULL);
+	SysFreeString(bstrWide);
+
+	//delete[] pszAnsi;
+	return pszAnsi;
+}
 /*
 
 

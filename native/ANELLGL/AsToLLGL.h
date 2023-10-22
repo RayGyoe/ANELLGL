@@ -65,7 +65,7 @@ static std::vector<std::vector<std::vector<float>>> ConvertArray(FREObject src)
 
 static void Convert(LLGL::VertexAttribute& dst, FREObject src)
 {
-    dst.name = ANEutils->getString(src,"name");
+    dst.name = ANEutils->getString(src, "name");
     dst.format = static_cast<LLGL::Format>(ANEutils->getInt32(src, "format"));
     dst.location = ANEutils->getInt32(src, "location");
     dst.semanticIndex = ANEutils->getInt32(src, "semanticIndex");
@@ -80,13 +80,15 @@ static void Convert(LLGL::BufferDescriptor& dst, FREObject src)
     FREObject VertexAttribs = ANEutils->getObject(src, "vertexAttribs");
     uint32_t length;
     FREGetArrayLength(VertexAttribs, &length);
-    ///
-    std::vector<LLGL::VertexAttribute> nativeVertexAttribs;
-    nativeVertexAttribs.resize(length);
-    //
-    for (int i = 0; i < (int)length; ++i) {
-        FREObject vertexAttrib = ANEutils->getArrayIndex(VertexAttribs, i);
-        Convert(nativeVertexAttribs[i], vertexAttrib);
+    if (length > 0) {
+        std::vector<LLGL::VertexAttribute> nativeVertexAttribs;
+        nativeVertexAttribs.resize(length);
+        //
+        for (int i = 0; i < (int)length; ++i) {
+            FREObject vertexAttrib = ANEutils->getArrayIndex(VertexAttribs, i);
+            Convert(nativeVertexAttribs[i], vertexAttrib);
+        }
+        dst.vertexAttribs = nativeVertexAttribs;
     }
     ///
     dst.size = ANEutils->getInt32(src,"size");
@@ -95,12 +97,26 @@ static void Convert(LLGL::BufferDescriptor& dst, FREObject src)
     dst.bindFlags = static_cast<long>(ANEutils->getInt32(src, "bindFlags"));
     dst.cpuAccessFlags = static_cast<long>(ANEutils->getInt32(src, "cpuAccessFlags"));
     dst.miscFlags = static_cast<long>(ANEutils->getInt32(src, "miscFlags"));
-    dst.vertexAttribs = nativeVertexAttribs;
 }
 
 
 static void Convert(LLGL::ShaderDescriptor& dst, FREObject src)
 {
+
+    ///
+    FREObject inputAttribs = ANEutils->getObject(ANEutils->getObject(src, "vertex"), "inputAttribs");
+    uint32_t length;
+    FREGetArrayLength(inputAttribs, &length);
+    if (length>0) {
+        std::vector<LLGL::VertexAttribute> Attribs;
+        Attribs.resize(length);
+        for (int i = 0; i < (int)length; ++i) {
+            FREObject vertexAttrib = ANEutils->getArrayIndex(inputAttribs, i);
+            Convert(Attribs[i], vertexAttrib);
+        }
+        dst.vertex.inputAttribs = Attribs;
+    }
+    //
     dst.type = (LLGL::ShaderType)ANEutils->getInt32(src, "type");
     dst.source = ANEutils->getString(src, "source").c_str();
     dst.sourceSize = ANEutils->getInt32(src, "sourceSize");
@@ -109,25 +125,13 @@ static void Convert(LLGL::ShaderDescriptor& dst, FREObject src)
 
     std::string entryPoint = ANEutils->getString(src, "entryPoint");
     if (!entryPoint.empty()) {
-        dst.entryPoint = entryPoint.c_str();
+        dst.entryPoint = ANEutils->UTF8ToCharANSI(entryPoint);
+        std::cout << "\n entryPoint=" << dst.entryPoint << std::endl;
     }
     std::string profile = ANEutils->getString(src, "profile");
     if (!profile.empty()) {
-        dst.profile = profile.c_str();
-    }
-
-    ///
-    FREObject inputAttribs = ANEutils->getObject(ANEutils->getObject(src, "vertex"),"inputAttribs");
-    uint32_t length;
-    FREGetArrayLength(inputAttribs, &length);
-    if (length) {
-        std::vector<LLGL::VertexAttribute> Attribs;
-        Attribs.resize(length);
-        for (int i = 0; i < (int)length; ++i) {
-            FREObject vertexAttrib = ANEutils->getArrayIndex(inputAttribs, i);
-            Convert(Attribs[i], vertexAttrib);
-        }
-        dst.vertex.inputAttribs = Attribs;
+        dst.profile = ANEutils->UTF8ToCharANSI(profile);
+        std::cout << "\n profile=" << dst.profile << std::endl;
     }
 }
 

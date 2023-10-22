@@ -90,20 +90,18 @@ package
 			
 			if (modules && modules.length)
 			{
-				renderSystem = ANELLGL.getInstance().loadRenderSystem(modules[0]);
+				renderSystem = ANELLGL.getInstance().loadRenderSystem(modules[1]);
 				trace(renderSystem);
 				if (renderSystem)
 				{
 					trace("GetName", renderSystem.GetName());
-					
-					
-					
+										
 					scd = new SwapChainDescriptor();
 					scd.depthBits = 1;
 					scd.stencilBits = 0;
 					//scd.samples = 8;
-					scd.width = stage.stageWidth * 0.7;
-					scd.height = stage.stageHeight * 0.7;
+					scd.width = 800;
+					scd.height = 600;
 					swapChian = renderSystem.CreateSwapChain(scd);
 					swapChian.SetVsyncInterval(1);
 					
@@ -201,8 +199,8 @@ package
 				
 				commands.Begin();
 				
-				//var viewport:Viewport = new Viewport(0, 0, scd.width, scd.height);
-				//commands.SetViewport(viewport);
+				var viewport:Viewport = new Viewport(0, 0, scd.width, scd.height);
+				commands.SetViewport(viewport);
 				// Set vertex buffer
 				commands.SetVertexBuffer(vertexBuffer);
 				// Set the swap-chain as the initial render target
@@ -221,8 +219,7 @@ package
 				
 				commandQueue.Submit(commands);
 				
-				swapChian.Present();
-				
+				swapChian.Present();				
 				
 			}else{
 				ANELLGL.getInstance().context.call("EnterFrame");

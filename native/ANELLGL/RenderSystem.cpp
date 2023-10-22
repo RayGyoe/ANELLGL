@@ -57,11 +57,6 @@ FREObject RenderSystem::CreateBuffer(FREObject Air_vertexBufferDesc, FREObject A
     };
 
 
-    float arrayData[18] = {
-        0, s, 255, 0, 0, 255,
-        s, -s, 0, 255, 0, 255,
-        - s, -s,0, 0, 255, 255
-    };
 
     /*
     // Vertex format
@@ -107,6 +102,7 @@ FREObject RenderSystem::CreateShader(FREObject Air_shaderDesc)
 
     LLGL::ShaderDescriptor shaderDesc;
     Convert(shaderDesc, Air_shaderDesc);
+    
     LLGL::Shader* shader = native->CreateShader(shaderDesc);
 
     if (auto report = shader->GetReport()) {

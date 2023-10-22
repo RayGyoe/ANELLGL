@@ -611,7 +611,7 @@ extern "C" {
 
             LLGL::Viewport viewport =  swapChain->GetResolution();
 
-           // std::cout << "\n  x£º" << viewport.x << "   y£º" << viewport.y << " width:" << viewport.width << "  height:" << viewport.height << std::endl;
+            std::cout << "\n  x£º" << viewport.x << "   y£º" << viewport.y << " width:" << viewport.width << "  height:" << viewport.height << std::endl;
 
             commands->SetViewport(viewport);
 
